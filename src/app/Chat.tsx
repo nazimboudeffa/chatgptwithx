@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useToast } from "@/components/ui/use-toast"
 
 interface ChatInteraction {
     isBot: boolean
@@ -52,7 +51,6 @@ async function askQuestion(apiKey: string, question: string) {
 export function Chat() {
     const [apiKey, setApiKey] = useState<string>("")
 
-    const { toast } = useToast()
     const [processing, setProcessing] = useState(false)
     const [chatInteractions, setChatInteractions] = useState<ChatInteraction[]>(
         [
