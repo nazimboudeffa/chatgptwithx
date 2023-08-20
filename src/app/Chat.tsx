@@ -18,6 +18,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
+import Image from 'next/image'
+import Link from 'next/link'
 interface ChatInteraction {
     isBot: boolean
     message: string
@@ -100,11 +102,11 @@ export function Chat() {
     }, [chatInteractions])
 
     return (
-        <div className="flex flex-col mt-10">
+        <div className="w-full md:w-8/12">
             <div className="flex flex-row justify-between">
                 <div>
                     <p className="text-sm text-muted-foreground mt-3 ml-3">
-                        More Xs will be available soon. Actually it works only with the Penal Code of Algeria.
+                        Actually working with <u>The Penal Code of Algeria</u>.
                     </p>
                 </div>
                 <div>
@@ -112,7 +114,7 @@ export function Chat() {
                         <AlertDialogTrigger asChild>
                             <Button
                                 variant="secondary"
-                                className={`min-w-[80px] mr-5 ${
+                                className={`min-w-[80px] mr-5 text-xs sm:text-sm ${
                                     !apiKey || apiKey.length == 0
                                         ? "animate-pulse"
                                         : ""
@@ -123,7 +125,7 @@ export function Chat() {
                                 ) : (
                                     <>
                                         <AlertCircle className="mr-2 h-4 w-4 text-destructive" />{" "}
-                                        Set OpenAI key
+                                        API Key
                                     </>
                                 )}
                             </Button>
@@ -207,6 +209,14 @@ export function Chat() {
                             "Send"
                         )}
                     </Button>
+                    <Link href="https://fr.tipeee.com/nazimboudeffa" passHref={true}>                   
+                    <Image
+                        src="tipeee_tip_btn.svg"
+                        alt="tip"
+                        height={80}
+                        width={80} 
+                    />
+                    </Link>
                 </form>
             </div>
         </div>
