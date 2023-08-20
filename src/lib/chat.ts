@@ -7,42 +7,47 @@ import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
-import fs from "fs";
+export async function promptChatGPT( apiKey : string, prompt: string) {
 
-const loader = new DirectoryLoader("./data", {
+  const loader = new DirectoryLoader("./src/data", {
     ".txt": (path) => new TextLoader(path),
   });
 
+  console.log("Loading docs...");
+  const docs = await loader.load();
+  console.log("Loaded docs:", docs.length);
 
-const docs = loader.load();
+  const VECTOR_STORE_PATH = "./src/data-index";
 
-function normalizeDocs(docs : any) {
-    return docs.map((doc : any) => {
-      if (typeof doc.pageContent === "string") {
-        return doc.pageContent;
-      } else if (Array.isArray(doc.pageContent)) {
-        return doc.pageContent.join("\n");
-      }
+  function normalizeDocs(docs : any) {
+      return docs.map((doc : any) => {
+        if (typeof doc.pageContent === "string") {
+          return doc.pageContent;
+        } else if (Array.isArray(doc.pageContent)) {
+          return doc.pageContent.join("\n");
+        }
+      });
+    }
+
+  const model = new OpenAI({ openAIApiKey: apiKey });
+
+  const textSplitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
     });
-  }
+  const normalizedDocs = normalizeDocs(docs);
+  const splitDocs = await textSplitter.createDocuments(normalizedDocs)
+  
+  let vectorStore = await HNSWLib.fromDocuments(
+      splitDocs,
+      new OpenAIEmbeddings( { openAIApiKey: apiKey } )
+  );
 
-const model = new OpenAI({});
+  await vectorStore.save(VECTOR_STORE_PATH);
 
-const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-  });
-const normalizedDocs = normalizeDocs(docs);
+  const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
 
-let vectorStore = HNSWLib.fromDocuments(
-    textSplitter.createDocuments(normalizedDocs),
-    new OpenAIEmbeddings()
-);
-
-const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
-
-export async function promptChatGPT(apiKey: string, prompt: string) {
-
-    const result = await chain.call({ query: prompt });
-
-    return result ? { text: result } : null
+  console.log("Creating retrieval chain...");
+  const result = await chain.call({ query: prompt });
+  console.log("Result:", result);
+  return result
 }
