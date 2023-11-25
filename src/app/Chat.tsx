@@ -106,7 +106,7 @@ export function Chat() {
             <div className="flex flex-row justify-between">
                 <div>
                     <p className="text-sm text-muted-foreground mt-3 ml-3">
-                        Actually working with <u>The Penal Code of Algeria</u>.
+                        Actually working with <u>Psychoanalysis</u>.
                     </p>
                 </div>
                 <div>
@@ -172,7 +172,7 @@ export function Chat() {
                                 <FileQuestion className="h-4 w-4" />
                             )}
                             <AlertDescription>
-                                <div>{i.message}</div>
+                                <div className="ml-5">{i.message}</div>
                             </AlertDescription>
                         </Alert>
                     ))}
