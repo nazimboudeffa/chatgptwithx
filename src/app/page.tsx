@@ -7,8 +7,8 @@ export default async function ChatGPTWithX() {
         <>  
         <main className="min-h-screen flex flex-col items-center justify-center w-full h-full">
             <Header
-                heading="Chat with X"
-                subheading="A ChatGPT alternative that lets you chat with documents."
+                heading="ChatGPT with X"
+                subheading="A ChatGPT app that lets you chat with documents."
             />
             <Chat />
         </main>
