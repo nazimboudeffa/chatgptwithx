@@ -9,9 +9,9 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 import fs from "fs";
 
-export async function promptChatGPT( apiKey : string, prompt: string) {
+export async function promptChatGPT( apiKey : string, prompt: string, document: string) {
 
-  const loader = new DirectoryLoader("./src/data", {
+  const loader = new DirectoryLoader("./src/documents/"+document+"-data", {
     ".txt": (path) => new TextLoader(path),
   });
 
@@ -19,7 +19,7 @@ export async function promptChatGPT( apiKey : string, prompt: string) {
   const docs = await loader.load();
   console.log("Loaded docs:", docs.length);
 
-  const VECTOR_STORE_PATH = "./src/data-index";
+  const VECTOR_STORE_PATH = "./src/documents/"+document+"-data-index";
 
   function normalizeDocs(docs : any) {
       return docs.map((doc : any) => {

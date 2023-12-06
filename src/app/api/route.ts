@@ -3,8 +3,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { promptChatGPT } from "@/lib/chat"
 
 export type ChatPrompt = {
+    apiKey: string
     prompt: string
-    apiKey?: string
+    document: string
 }
 
 export async function POST(request: NextRequest) {
@@ -22,7 +23,8 @@ export async function POST(request: NextRequest) {
 
         const result = await promptChatGPT(
             chatPrompt.apiKey,
-            chatPrompt.prompt
+            chatPrompt.prompt,
+            chatPrompt.document
         )
 
         return NextResponse.json({

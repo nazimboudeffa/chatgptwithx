@@ -18,6 +18,14 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"  
+
 import Image from 'next/image'
 import Link from 'next/link'
 interface ChatInteraction {
@@ -25,13 +33,14 @@ interface ChatInteraction {
     message: string
 }
 
-async function askQuestion(apiKey: string, question: string) {
+async function askQuestion(apiKey: string, question: string, selectedDocument: string) {
     try {
         const response = await fetch(`./api`, {
             method: "POST",
             body: JSON.stringify({
                 apiKey,
                 prompt: question,
+                document: selectedDocument,
             }),
         })
 
@@ -52,12 +61,12 @@ async function askQuestion(apiKey: string, question: string) {
 
 export function Chat() {
     const [apiKey, setApiKey] = useState<string>("")
-
+    const [selectedDocument, setSelectedDocument] = useState<string>("psychoanalysis")
     const [processing, setProcessing] = useState(false)
     const [chatInteractions, setChatInteractions] = useState<ChatInteraction[]>(
         [
             {
-                message: `Hi! 👋, You are using the ChatGPTWithX App. Try to prompt and see what happens.`,
+                message: `Hi! 👋, You are using a ChatGPT app. Try to prompt and see what happens.`,
                 isBot: true,
             },
         ]
@@ -75,7 +84,7 @@ export function Chat() {
         ])
 
         setProcessing(true)
-        const result = await askQuestion(apiKey, question)
+        const result = await askQuestion(apiKey, question, selectedDocument)
         setProcessing(false)
 
         if (result?.success && result.result) {
@@ -106,7 +115,7 @@ export function Chat() {
             <div className="flex flex-row justify-between">
                 <div>
                     <p className="text-sm text-muted-foreground mt-3 ml-3">
-                        Actually working with <u>Psychoanalysis</u>.
+                        Actually working with <u>{selectedDocument}</u>
                     </p>
                 </div>
                 <div>
@@ -198,6 +207,16 @@ export function Chat() {
                         onChange={(e) => setQuestion(e.target.value)}
                         value={question}
                     />
+                    <Select onValueChange={(e)=>setSelectedDocument(e)} defaultValue="psychoanalysis">
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Document?" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="psychoanalysis">Psychoanalysis</SelectItem>
+                            <SelectItem value="dz-law">Penal Code of Algeria</SelectItem>
+                            <SelectItem value="ydkjs">You do not know JavaScript</SelectItem>
+                        </SelectContent>
+                    </Select>
                     <Button
                         type="submit"
                         disabled={processing}
