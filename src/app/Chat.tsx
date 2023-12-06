@@ -118,7 +118,7 @@ export function Chat() {
                         Actually working with <u>{selectedDocument}</u>
                     </p>
                 </div>
-                <div>
+                <div className="flex flex-row">
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button
@@ -166,6 +166,14 @@ export function Chat() {
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
+                    <Link href="https://fr.tipeee.com/nazimboudeffa" passHref={true}>                   
+                    <Image
+                        src="tipeee_tip_btn.svg"
+                        alt="tip"
+                        height={80}
+                        width={70} 
+                    />
+                    </Link>
                 </div>
             </div>
             <div className="mt-4 rounded-lg">
@@ -228,14 +236,6 @@ export function Chat() {
                             "Send"
                         )}
                     </Button>
-                    <Link href="https://fr.tipeee.com/nazimboudeffa" passHref={true}>                   
-                    <Image
-                        src="tipeee_tip_btn.svg"
-                        alt="tip"
-                        height={80}
-                        width={80} 
-                    />
-                    </Link>
                 </form>
             </div>
         </div>
